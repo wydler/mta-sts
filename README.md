@@ -6,15 +6,16 @@ Online version: https://mta-sts-tester.cl01.daniel.wydler.eu/
 
 License: BSD 2-clause license (see LICENSE.txt).
 
-## Installing application on Ubuntu 22.04 LTS
+## Installing application on Ubuntu 24.04 LTS
 
  1. Install dependencies:
     ```
     $ apt update
-    $ apt install uwsgi uwsgi-plugin-python3 python3-flask python3-dnspython
-    
-    $ apt install python3-pip
-    $ pip3 install Flask-Limiter
+    $ apt install uwsgi uwsgi-plugin-python3 python3-flask python3-dnspython python3-venv pipx
+
+    $ python3 -m venv --system-site-packages /opt/mta-sts-venv
+    $ /opt/mta-sts-venv/bin/python -m pip install Flask-Limiter
+    ```
 
  2. Create a configuration file for uWSGI at `/etc/uwsgi/apps-available/emperor.ini`:
 
@@ -51,6 +52,7 @@ License: BSD 2-clause license (see LICENSE.txt).
 	plugins            = python3
 	chmod-socket       = 660
 	pythonpath         = /var/www/html/mta-sts
+	virtualenv         = /opt/mta-sts-venv
 	stats              = 127.0.0.1:17005
 	vacuum             = True
 	processes          = 1
@@ -67,15 +69,17 @@ License: BSD 2-clause license (see LICENSE.txt).
         $ git clone --branch Customize https://github.com/wydler/mta-sts /var/www/html/mta-sts
 		
 
- 7. Install a montioring tool for it:
-			
-        $ pip3 install setuptools wheel
-        $ pip3 install uwsgitop
+ 7. Install a monitoring tool for it as the user who will run it:
+
+        $ pipx ensurepath
+        $ pipx install uwsgitop
+
+   Open a new shell if `pipx ensurepath` changed your `PATH`, then run:
 
         $ uwsgitop 127.0.0.1:17005
 
 		
-## Installing apache2 on Ubuntu 22.04 LTS
+## Installing apache2 on Ubuntu 24.04 LTS
 
  1. Install webserver and dependencies:
 
@@ -103,7 +107,7 @@ License: BSD 2-clause license (see LICENSE.txt).
         $ systemctl restart apache2.service
 
 
-## Installing nginx on Ubuntu 22.04 LTS
+## Installing nginx on Ubuntu 24.04 LTS
 
  1. Install webserver:
 
