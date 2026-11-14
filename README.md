@@ -140,7 +140,7 @@ License: BSD 2-clause license (see LICENSE.txt).
     ```nginx
     server {
         ...
-        root /var/www/html/mta-sts/;
+        root /var/www/html/mta-sts;
         ....
         location = /api {
                 include uwsgi_params;
