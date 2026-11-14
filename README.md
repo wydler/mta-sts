@@ -61,6 +61,7 @@ License: BSD 2-clause license (see LICENSE.txt).
 	vacuum             = True
 	processes          = 1
 	pidfile            = /tmp/%n.pid
+   logto              = /tmp/mta-sts-uwsgi.log
     ```
     ```bash
     chmod 644 /etc/uwsgi/vassals/mta-sts.ini
