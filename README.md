@@ -10,11 +10,11 @@ License: BSD 2-clause license (see LICENSE.txt).
 
  1. Install dependencies:
     ```bash
-    $ apt update
-    $ apt install uwsgi uwsgi-plugin-python3 python3-flask python3-dnspython python3-venv pipx
+    apt update
+    apt install uwsgi uwsgi-plugin-python3 python3-flask python3-dnspython python3-venv pipx
 
-    $ python3 -m venv --system-site-packages /opt/mta-sts-venv
-    $ /opt/mta-sts-venv/bin/python -m pip install Flask-Limiter
+    python3 -m venv --system-site-packages /opt/mta-sts-venv
+    /opt/mta-sts-venv/bin/python -m pip install Flask-Limiter
     ```
 
  2. Create a configuration file for uWSGI at `/etc/uwsgi/apps-available/emperor.ini`:
@@ -30,17 +30,17 @@ License: BSD 2-clause license (see LICENSE.txt).
 	logto = /tmp/uwsgi.log
     ```
     ```bash
-    $ chmod 644 /etc/uwsgi/apps-available/emperor.ini
-    $ cd /etc/uwsgi/apps-enabled
-    $ ln -s ../apps-available/emperor.ini .
-    $ cd ~
+    chmod 644 /etc/uwsgi/apps-available/emperor.ini
+    cd /etc/uwsgi/apps-enabled
+    ln -s ../apps-available/emperor.ini .
+    cd ~
     ```
 	
  3. Create `/etc/uwsgi/vassals/`:
  
     ```bash
-    $ mkdir /etc/uwsgi/vassals
-    $ chmod 755 /etc/uwsgi/vassals
+    mkdir /etc/uwsgi/vassals
+    chmod 755 /etc/uwsgi/vassals
     ```
 	
  4. Create a configuration for this app at `/etc/uwsgi/vassals/mta-sts.ini`:
@@ -63,33 +63,33 @@ License: BSD 2-clause license (see LICENSE.txt).
 	pidfile            = /tmp/%n.pid
     ```
     ```bash
-    $ chmod 644 /etc/uwsgi/vassals/mta-sts.ini
+    chmod 644 /etc/uwsgi/vassals/mta-sts.ini
     ```
 
  5. Restart service:
  
     ```bash
-    $ systemctl restart uwsgi.service
+    systemctl restart uwsgi.service
     ```
 
  6. Install the application:
 	
     ```bash
-    $ git clone --branch Customize https://github.com/wydler/mta-sts /var/www/html/mta-sts
+    git clone --branch Customize https://github.com/wydler/mta-sts /var/www/html/mta-sts
     ```
 		
 
  7. Install a monitoring tool for it as the user who will run it:
 
     ```bash
-    $ pipx ensurepath
-    $ pipx install uwsgitop
+    pipx ensurepath
+    pipx install uwsgitop
     ```
 
    Open a new shell if `pipx ensurepath` changed your `PATH`, then run:
 
     ```bash
-    $ uwsgitop 127.0.0.1:17005
+    uwsgitop 127.0.0.1:17005
     ```
 
 		
@@ -98,10 +98,10 @@ License: BSD 2-clause license (see LICENSE.txt).
  1. Install webserver and dependencies:
 
     ```bash
-    $ apt install apache2 apache2-dev
-    $ wget https://github.com/unbit/uwsgi/raw/master/apache2/mod_proxy_uwsgi.c
-    $ apxs2 -i -c mod_proxy_uwsgi.c
-    $ a2enmod proxy_http
+    apt install apache2 apache2-dev
+    wget https://github.com/unbit/uwsgi/raw/master/apache2/mod_proxy_uwsgi.c
+    apxs2 -i -c mod_proxy_uwsgi.c
+    a2enmod proxy_http
     ```
 
  2. Expand existing webserver configuration with these lines. For example `/etc/apache2/sites-available/000-default.conf`:
@@ -121,7 +121,7 @@ License: BSD 2-clause license (see LICENSE.txt).
  3. Restart service:
  
     ```bash
-    $ systemctl restart apache2.service
+    systemctl restart apache2.service
     ```
 
 
@@ -130,7 +130,7 @@ License: BSD 2-clause license (see LICENSE.txt).
  1. Install webserver:
 
     ```bash
-    $ apt install nginx
+    apt install nginx
     ```
 
  2. Expand existing webserver configuration with these lines. For example `/etc/nginx/sites-enabled/default`:
@@ -150,7 +150,7 @@ License: BSD 2-clause license (see LICENSE.txt).
  3. Restart service:
  
     ```bash
-    $ systemctl restart nginx.service
+    systemctl restart nginx.service
     ```
 		
 
