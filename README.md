@@ -86,7 +86,7 @@ License: BSD 2-clause license (see LICENSE.txt).
     pipx install uwsgitop
     ```
 
-   Open a new shell if `pipx ensurepath` changed your `PATH`, then run:
+    Open a new shell if `pipx ensurepath` changed your `PATH`, then run:
 
     ```bash
     uwsgitop 127.0.0.1:17005
