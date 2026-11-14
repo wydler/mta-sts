@@ -11,7 +11,7 @@ License: BSD 2-clause license (see LICENSE.txt).
  1. Install dependencies:
     ```bash
     apt update
-    apt install uwsgi uwsgi-plugin-python3 python3-flask python3-dnspython python3-venv pipx
+    apt install -y uwsgi uwsgi-plugin-python3 python3-flask python3-dnspython python3-venv pipx
 
     python3 -m venv --system-site-packages /opt/mta-sts-venv
     /opt/mta-sts-venv/bin/python -m pip install Flask-Limiter
@@ -99,7 +99,7 @@ License: BSD 2-clause license (see LICENSE.txt).
  1. Install webserver and dependencies:
 
     ```bash
-    apt install apache2 apache2-dev
+    apt install -y apache2 apache2-dev
     wget https://github.com/unbit/uwsgi/raw/master/apache2/mod_proxy_uwsgi.c
     apxs2 -i -c mod_proxy_uwsgi.c
     a2enmod proxy_http
@@ -131,7 +131,7 @@ License: BSD 2-clause license (see LICENSE.txt).
  1. Install webserver:
 
     ```bash
-    apt install nginx
+    apt install -y nginx
     ```
 
  2. Expand existing webserver configuration with these lines. For example `/etc/nginx/sites-enabled/default`:
