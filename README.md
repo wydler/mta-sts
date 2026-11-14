@@ -75,7 +75,7 @@ License: BSD 2-clause license (see LICENSE.txt).
  6. Install the application:
 	
     ```bash
-    git clone --branch Customize https://github.com/wydler/mta-sts /var/www/html/mta-sts
+    git clone --branch customize https://github.com/wydler/mta-sts /var/www/html/mta-sts
     ```
 		
 
