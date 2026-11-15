@@ -4,7 +4,7 @@ import sys
 import dns.resolver # Debian: python3-dnspython
 import urllib.parse
 import http.client
-import cgi
+from email.message import Message
 import json
 import smtplib
 import ssl
@@ -26,8 +26,8 @@ SMTP_LOCAL_HOSTNAME = None
 # See e.g. this page how to deploy:
 # http://flask.pocoo.org/docs/0.12/deploying/uwsgi/
 
-domainPattern   = re.compile(       '^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$')
-mxDomainPattern = re.compile('^(\*\.)?(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$')
+domainPattern   = re.compile(r'^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$')
+mxDomainPattern = re.compile(r'^(\*\.)?(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$')
 
 # Set up DNS resolver that requests validation
 resolver = dns.resolver.Resolver()
@@ -453,7 +453,9 @@ def checkPolicyFile(result, domain):
     contentType = res.getheader('Content-Type')
     if contentType is None:
         return result.error('no-content-type')
-    mimetype, options = cgi.parse_header(contentType)
+    contentTypeHeader = Message()
+    contentTypeHeader['Content-Type'] = contentType
+    mimetype = contentTypeHeader.get_content_type()
     if mimetype != 'text/plain':
         return result.error('invalid-content-type', contentType)
     info = {'mx': []}
