@@ -268,7 +268,7 @@ class Report:
 def retrieveTXTRecord(result, domain, prefix, magic):
     fullDomain = prefix + '.' + domain
     try:
-        answers = resolver.query(fullDomain, 'TXT')
+        answers = resolver.resolve(fullDomain, 'TXT')
     except dns.resolver.NXDOMAIN:
         return result.error('no-domain', fullDomain)
     except dns.resolver.NoAnswer:
@@ -538,7 +538,7 @@ def checkPolicyFile(result, domain):
 
 def getMX(result, domain):
     try:
-        answers = resolver.query(domain, 'MX')
+        answers = resolver.resolve(domain, 'MX')
     except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.resolver.Timeout):
         return result.error('dns-error', domain)
 
@@ -568,7 +568,7 @@ def checkMailserver(result, mx, preference, policyNames):
         return data
 
     try:
-        tlsarrs = resolver.query('_25._tcp.' + mx, 'TLSA')
+        tlsarrs = resolver.resolve('_25._tcp.' + mx, 'TLSA')
         data.dnssec_tlsa  = bool(tlsarrs.response.flags & dns.flags.AD)
         for rr in tlsarrs:
             if not isinstance(rr, dns.rdtypes.ANY.TLSA.TLSA):
@@ -582,7 +582,7 @@ def checkMailserver(result, mx, preference, policyNames):
     cert = None
     try:
 
-        answers = resolver.query(mx, 'A')
+        answers = resolver.resolve(mx, 'A')
         # TODO: IPv6
         # TODO: try all other IP addresses returned
         data.dnssec_a = bool(answers.response.flags & dns.flags.AD)
