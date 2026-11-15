@@ -2,8 +2,6 @@
 
 This tool checks MTA-STS (RFC 8461), SMTP TLS reporting (TLSRPT), and experimental DANE configuration for a mail domain. MTA-STS is a standardized mechanism for protecting SMTP connections against downgrade attacks. This tool is not a comprehensive mail-security audit; verify important results independently.
 
-License: BSD 2-clause license (see LICENSE.txt).
-
 ## Prerequisites
 
 - Ubuntu Server 24.04 LTS and an account with `sudo` privileges.
