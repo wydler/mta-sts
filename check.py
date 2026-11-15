@@ -749,7 +749,7 @@ def makeEventSource(data):
 
 def main():
     if len(sys.argv) < 2:
-        app.run(debug=True)
+        app.run(debug=False)
     else:
         result = checkPolicy(sys.argv[1])
         if result.dnsPolicy:
