@@ -187,6 +187,10 @@ Choose either Apache or nginx. The following sections are alternatives; use only
         ...
         DocumentRoot /var/www/html/mta-sts
         ...
+        <FilesMatch "\.json$">
+            Require all denied
+        </FilesMatch>
+
         ProxyPass /api uwsgi://127.0.0.1:17000
         ProxyPassReverse /api uwsgi://127.0.0.1:17000
         ...
@@ -217,6 +221,9 @@ Choose either Apache or nginx. The following sections are alternatives; use only
         ...
         index index.html;
         ...
+        location ~* \.json$ {
+                return 404;
+        }
         location = /api {
                 include uwsgi_params;
                 uwsgi_pass 127.0.0.1:17000;
