@@ -4,14 +4,14 @@ This tool checks MTA-STS (RFC 8461), SMTP TLS reporting (TLSRPT), and experiment
 
 ## Prerequisites
 
-- Ubuntu Server 24.04 LTS and an account with `sudo` privileges.
+- Ubuntu Server 24.04 or 26.04 LTS and an account with `sudo` privileges.
 - Allow incoming TCP connections on port 80; allow port 443 as well if HTTPS is configured.
 - Allow outgoing DNS queries over UDP and TCP port 53. The application currently queries Quad9 directly using the resolvers configured in `check.py`: `9.9.9.9`, `149.112.112.112`, `2620:fe::fe`, and `2620:fe::9`.
 - Allow outgoing HTTPS connections over TCP port 443 to retrieve MTA-STS policy files and install dependencies.
 - Allow outgoing SMTP connections over TCP port 25 to the mail servers being checked. Some hosting providers block outbound SMTP; mail-server checks may fail or time out if this port is unavailable.
 - Keep the uWSGI application socket (`127.0.0.1:17000`) and stats endpoint (`127.0.0.1:17005`) bound to localhost; do not expose them through the firewall.
 
-## Installing application on Ubuntu 24.04 LTS
+## Installing application on Ubuntu 24.04 or 26.04 LTS
 
 1. Install dependencies:
     ```bash
@@ -162,7 +162,7 @@ This tool checks MTA-STS (RFC 8461), SMTP TLS reporting (TLSRPT), and experiment
 
 Choose either Apache or nginx. The following sections are alternatives; use only the section for the web server you want.
 
-### Installing apache2 on Ubuntu 24.04 LTS
+### Installing apache2 on Ubuntu 24.04 or 26.04 LTS
 
 1. Install webserver and dependencies:
 
@@ -196,7 +196,7 @@ Choose either Apache or nginx. The following sections are alternatives; use only
     ```
 
 
-### Installing nginx on Ubuntu 24.04 LTS
+### Installing nginx on Ubuntu 24.04 or 26.04 LTS
 
 1. Install webserver:
 
