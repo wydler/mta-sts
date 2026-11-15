@@ -6,7 +6,7 @@ This tool checks MTA-STS (RFC 8461), SMTP TLS reporting (TLSRPT), and experiment
 
 - Ubuntu Server 24.04 or 26.04 LTS and an account with `sudo` privileges.
 - Allow incoming TCP connections on port 80; allow port 443 as well if HTTPS is configured.
-- Allow outgoing DNS queries over UDP and TCP port 53. The application currently queries Quad9 directly using the resolvers configured in `check.py`: `9.9.9.9`, `149.112.112.112`, `2620:fe::fe`, and `2620:fe::9`.
+- Allow outgoing DNS queries over UDP and TCP port 53. DNS nameservers are configured in `settings.json`; the example configuration uses Quad9 (`9.9.9.9`, `149.112.112.112`, `2620:fe::fe`, and `2620:fe::9`).
 - Allow outgoing HTTPS connections over TCP port 443 to retrieve MTA-STS policy files and install dependencies.
 - Allow outgoing SMTP connections over TCP port 25 to the mail servers being checked. Some hosting providers block outbound SMTP; mail-server checks may fail or time out if this port is unavailable.
 - Keep the uWSGI application socket (`127.0.0.1:17000`) and stats endpoint (`127.0.0.1:17005`) bound to localhost; do not expose them through the firewall.
@@ -125,7 +125,11 @@ This tool checks MTA-STS (RFC 8461), SMTP TLS reporting (TLSRPT), and experiment
 	
     ```bash
     sudo git clone --branch customize https://github.com/wydler/mta-sts /var/www/html/mta-sts
+    sudo cp /var/www/html/mta-sts/settings.example.json /var/www/html/mta-sts/settings.json
+    sudo chmod 644 /var/www/html/mta-sts/settings.json
     ```
+
+    Edit `/var/www/html/mta-sts/settings.json` to configure the DNS nameservers and, if needed, the SMTP local hostname. This local file is ignored by Git, so its settings are retained when updating the application.
 
 8. Enable and start the service:
 
@@ -183,6 +187,10 @@ Choose either Apache or nginx. The following sections are alternatives; use only
         ...
         DocumentRoot /var/www/html/mta-sts
         ...
+        <FilesMatch "\.json$">
+            Require all denied
+        </FilesMatch>
+
         ProxyPass /api uwsgi://127.0.0.1:17000
         ProxyPassReverse /api uwsgi://127.0.0.1:17000
         ...
@@ -213,6 +221,9 @@ Choose either Apache or nginx. The following sections are alternatives; use only
         ...
         index index.html;
         ...
+        location ~* \.json$ {
+                return 404;
+        }
         location = /api {
                 include uwsgi_params;
                 uwsgi_pass 127.0.0.1:17000;
