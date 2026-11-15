@@ -234,7 +234,7 @@ Open `http://<IP address or FQDN>/` (or use `https://` if configured) and submit
 To test the API directly through nginx, run:
 
 ```bash
-curl -N -v --max-time 120 'http://127.0.0.1/api?domain=example.com'
+curl -N -v --max-time 360 'http://127.0.0.1/api?domain=example.com'
 ```
 
 If the webserver is configured for a specific hostname or HTTPS, use that hostname and scheme instead of `127.0.0.1`. A successful request returns `HTTP 200`, a `text/event-stream` content type, and streamed lines beginning with `data:`.
