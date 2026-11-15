@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 
 import sys
+import ipaddress
 import dns.resolver # Debian: python3-dnspython
 import urllib.parse
 import http.client
 from email.message import Message
 import json
+from pathlib import Path
 import smtplib
 import ssl
 import socket
@@ -20,8 +22,31 @@ from cryptography.hazmat.primitives import serialization # Debian: python3-crypt
 from cryptography.x509 import load_der_x509_certificate
 from cryptography.hazmat.backends import default_backend
 
-NAMESERVERS = ['2620:fe::fe', '2620:fe::9', '9.9.9.9', '149.112.112.112']
-SMTP_LOCAL_HOSTNAME = None
+settingsPath = Path(__file__).with_name('settings.json')
+with settingsPath.open(encoding='utf-8') as settingsFile:
+    settings = json.load(settingsFile)
+
+if not isinstance(settings, dict):
+    raise ValueError(f'{settingsPath} must contain a JSON object')
+
+nameservers = settings.get('dns_nameservers')
+if not isinstance(nameservers, list) or not nameservers:
+    raise ValueError(f'dns_nameservers in {settingsPath} must be a non-empty list')
+if any(not isinstance(nameserver, str) or not nameserver.strip() for nameserver in nameservers):
+    raise ValueError(f'dns_nameservers in {settingsPath} must contain non-empty IP addresses')
+
+NAMESERVERS = [nameserver.strip() for nameserver in nameservers]
+for nameserver in NAMESERVERS:
+    try:
+        ipaddress.ip_address(nameserver)
+    except ValueError as e:
+        raise ValueError(f'Invalid DNS nameserver IP address in {settingsPath}: {nameserver!r}') from e
+
+SMTP_LOCAL_HOSTNAME = settings.get('smtp_local_hostname')
+if SMTP_LOCAL_HOSTNAME is not None and (
+    not isinstance(SMTP_LOCAL_HOSTNAME, str) or not SMTP_LOCAL_HOSTNAME.strip()
+):
+    raise ValueError(f'smtp_local_hostname in {settingsPath} must be a non-empty string or null')
 
 # See e.g. this page how to deploy:
 # http://flask.pocoo.org/docs/0.12/deploying/uwsgi/
